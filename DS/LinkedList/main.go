@@ -1,4 +1,4 @@
-package main
+package LinkedList
 
 import "fmt"
 
@@ -15,15 +15,18 @@ type LinkedList struct {
 	Length int
 }
 
-func (a *LinkedList) size() int {
+//Size method for returning size of linked list
+func (a *LinkedList) Size() int {
 	return a.Length
 }
 
-func (a *LinkedList) empty() bool {
+//Empty checking for linked list
+func (a *LinkedList) Empty() bool {
 	return a.Length == 0
 }
 
-func (a *LinkedList) valueAt(index int) interface{} {
+//ValueAt get value of linked list by index
+func (a *LinkedList) ValueAt(index int) interface{} {
 	counter := 0
 	chead := a.Head
 	for chead != nil {
@@ -43,7 +46,8 @@ func (a *LinkedList) decreaseSize() {
 	a.Length--
 }
 
-func (a *LinkedList) pushFront(value interface{}) {
+//PushFront pushes value at front
+func (a *LinkedList) PushFront(value interface{}) {
 	q := Node{Value: value, Next: a.Head}
 	a.Head = &q
 	if a.Head == nil {
@@ -59,14 +63,16 @@ func (a *LinkedList) pushFront(value interface{}) {
 	a.increaseSize()
 }
 
-func (a *LinkedList) popFront() interface{} {
+//PopFront return element from front
+func (a *LinkedList) PopFront() interface{} {
 	v := a.Head.Value
 	a.Head = a.Head.Next
 	a.decreaseSize()
 	return v
 }
 
-func (a *LinkedList) pushBack(value interface{}) {
+//PushBack pushes elment at back of linked list
+func (a *LinkedList) PushBack(value interface{}) {
 	q := Node{Value: value, Next: nil}
 	if a.Head == nil {
 		a.Head = &q
@@ -78,7 +84,8 @@ func (a *LinkedList) pushBack(value interface{}) {
 	a.increaseSize()
 }
 
-func (a *LinkedList) popBack() interface{} {
+//PopBack returns element from back of linked list
+func (a *LinkedList) PopBack() interface{} {
 	cnode := a.Head
 	prev := cnode
 	for cnode.Next != nil {
@@ -87,34 +94,35 @@ func (a *LinkedList) popBack() interface{} {
 	}
 	a.Tail = prev
 	prev.Next = nil
+	a.decreaseSize()
 	return cnode.Value
 }
 
-func (a *LinkedList) front() interface{} {
+//Front return value of front element
+func (a *LinkedList) Front() interface{} {
 	return a.Head.Value
 }
 
-func (a *LinkedList) back() interface{} {
-	if !a.empty() {
+//Back return value of back element
+func (a *LinkedList) Back() interface{} {
+	if !a.Empty() {
 		return a.Tail.Value
 	}
 	return nil
 }
 
-func (a *LinkedList) insertAt(index int, value interface{}) {
+//InsertAt inserts element at index
+func (a *LinkedList) InsertAt(index int, value interface{}) {
 	counter := 0
 	chead := a.Head
-	prev := chead
+	var prev *Node
 	if chead == nil {
 		q := Node{Value: value, Next: nil}
 		a.Head = &q
 	} else {
-
 		q := Node{Value: value, Next: nil}
 		for chead != nil {
 			if index == counter {
-				// prev = &q
-				// prev.Next = chead
 				break
 			}
 			prev = chead
@@ -126,20 +134,19 @@ func (a *LinkedList) insertAt(index int, value interface{}) {
 			prev.Next = chead
 			a.Head = prev
 		} else {
+			prev.Next = &q
+			q.Next = chead
+			if chead == nil {
+				a.Tail = &q
+			}
 
 		}
-		fmt.Println(prev)
-		fmt.Println(chead)
-		fmt.Println(q)
-		// prev.Next = &q
-		// q.Next = chead
-		// prev.Next = chead.Next
-
 	}
 	a.increaseSize()
 }
 
-func (a *LinkedList) eraseAt(index int) {
+//EraseAt removes element by index
+func (a *LinkedList) EraseAt(index int) {
 	counter := 0
 	chead := a.Head
 	var prev *Node
@@ -149,9 +156,14 @@ func (a *LinkedList) eraseAt(index int) {
 		}
 		prev = chead
 		chead = chead.Next
+		counter++
 	}
 	if prev != nil {
-		prev.Next = chead.Next
+		if chead != nil {
+			prev.Next = chead.Next
+		} else {
+			prev.Next = nil
+		}
 	} else {
 		chead = chead.Next
 		a.Head = chead
@@ -159,8 +171,9 @@ func (a *LinkedList) eraseAt(index int) {
 	a.decreaseSize()
 }
 
-func (a *LinkedList) print() {
-	if a.empty() {
+//Print printes elements of linkedlist
+func (a *LinkedList) Print() {
+	if a.Empty() {
 		fmt.Println("No items in linked list")
 	} else {
 		c := a.Head
@@ -171,28 +184,20 @@ func (a *LinkedList) print() {
 	}
 }
 
-func main() {
-	var q LinkedList
-	q.pushFront(10)
-	q.pushFront(20)
-	q.pushBack(30)
-	q.pushBack(40)
-	// q.insert(0, 40)
-	// q.insert(0, 20)
-	q.print()
-	// q.pushBack(10)
-	// q.pushBack(20)
-	// // q.pushFront(30)
-	//
-	// q.pushTop(40)
-	// q.print()
-	// fmt.Println("-----")
-	// // fmt.Println(q.popFront())
-	// fmt.Println("-----")
-	// q.print()
-	// fmt.Println(q.tail())
-	// q.delete(10)
-	// q.delete(20)
-	// q.delete(30)
-	// q.print()
+//Reverse reverses files in linkedlist
+func (a *LinkedList) Reverse() {
+	var r LinkedList
+	chead := a.Head
+	for chead != nil {
+		r.PushFront(chead.Value)
+		chead = chead.Next
+	}
+	*a = r
+}
+
+// Clear cleares all elements in linked list
+func (a *LinkedList) Clear() {
+	a.Head = nil
+	a.Tail = nil
+	a.Length = 0
 }
