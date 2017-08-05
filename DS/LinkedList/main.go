@@ -2,6 +2,9 @@ package LinkedList
 
 import "fmt"
 
+//MsgEmpty msg for returning if linked list empty
+const MsgEmpty = "LinkedList is empty"
+
 // Node Item of linked list
 type Node struct {
 	Value interface{}
@@ -65,6 +68,9 @@ func (a *LinkedList) PushFront(value interface{}) {
 
 //PopFront return element from front
 func (a *LinkedList) PopFront() interface{} {
+	if a.Empty() {
+		return "LinkedList is empty"
+	}
 	v := a.Head.Value
 	a.Head = a.Head.Next
 	a.decreaseSize()
@@ -86,6 +92,9 @@ func (a *LinkedList) PushBack(value interface{}) {
 
 //PopBack returns element from back of linked list
 func (a *LinkedList) PopBack() interface{} {
+	if a.Empty() {
+		return MsgEmpty
+	}
 	cnode := a.Head
 	prev := cnode
 	for cnode.Next != nil {
@@ -100,7 +109,11 @@ func (a *LinkedList) PopBack() interface{} {
 
 //Front return value of front element
 func (a *LinkedList) Front() interface{} {
-	return a.Head.Value
+	if a.Empty() == false {
+		return a.Head.Value
+	} else {
+		return MsgEmpty
+	}
 }
 
 //Back return value of back element
@@ -108,7 +121,7 @@ func (a *LinkedList) Back() interface{} {
 	if !a.Empty() {
 		return a.Tail.Value
 	}
-	return nil
+	return MsgEmpty
 }
 
 //InsertAt inserts element at index
@@ -147,6 +160,10 @@ func (a *LinkedList) InsertAt(index int, value interface{}) {
 
 //EraseAt removes element by index
 func (a *LinkedList) EraseAt(index int) {
+	if index > a.Size() {
+		fmt.Printf("Index could not be large than Linked List size: %v", a.Size())
+		return
+	}
 	counter := 0
 	chead := a.Head
 	var prev *Node
