@@ -47,6 +47,7 @@ func (a *Heap) Insert(v int) {
 //Delete index from heap
 func (a *Heap) Delete(i int) {
 	a.DecreaseKey(i, -10*6)
+	a.ExtractMin()
 	a.Heapify(0)
 }
 
@@ -72,7 +73,7 @@ func (a *Heap) GetMin() int {
 func (a *Heap) DecreaseKey(key int, nval int) {
 	a.Elements[key] = nval
 	index := key
-	for index != 0 && a.Elements[a.Parent(index)] >= a.Elements[index] {
+	for index != 0 && a.Elements[a.Parent(index)] > a.Elements[index] {
 		a.Elements[a.Parent(index)], a.Elements[index] = a.Elements[index], a.Elements[a.Parent(index)]
 		index = a.Parent(index)
 	}
