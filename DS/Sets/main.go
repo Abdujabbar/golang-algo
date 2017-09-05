@@ -4,13 +4,13 @@ import "fmt"
 
 // Set DS
 type Set struct {
-	Items map[interface{}]interface{}
+	Items map[interface{}]bool
 }
 
 //InitSet method for initilize
 func InitSet() *Set {
 	a := Set{}
-	a.Items = make(map[interface{}]interface{})
+	a.Items = make(map[interface{}]bool)
 	return &a
 }
 
@@ -19,7 +19,7 @@ func (a *Set) Add(element interface{}) bool {
 	if _, ok := a.Items[element]; ok {
 		return false
 	}
-	a.Items[element] = element
+	a.Items[element] = true
 	return true
 }
 
